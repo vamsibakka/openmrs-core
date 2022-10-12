@@ -1,0 +1,22 @@
+pipeline {
+    agent  { label 'java-11' }
+    stages {
+        stage('openmrn') {
+            steps {
+                git branch: 'master', url: 'https://github.com/vamsibakka/openmrs-core.git'
+            }
+
+        }
+        stage('build') {
+            steps {
+                sh '/opt/apache-maven-3.8.6/bin/mvn package'
+            }
+        }
+        stage('archive results') {
+            steps {
+                junit '**/surefire-reports/*.xml'
+            }
+        }
+    }
+
+}
